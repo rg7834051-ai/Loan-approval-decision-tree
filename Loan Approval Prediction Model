@@ -1,0 +1,36 @@
+# Import libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+
+# Step 1: Predefined dataset
+data = {
+    'income': [25000, 40000, 50000, 60000, 70000, 80000, 30000, 45000, 65000, 85000],
+    'credit_score': [550, 600, 650, 700, 750, 800, 580, 620, 720, 780],
+    'loan_status': [0, 0, 1, 1, 1, 1, 0, 0, 1, 1]  # 0 = Not Approved, 1 = Approved
+}
+
+df = pd.DataFrame(data)
+
+# Step 2: Features & target
+X = df[['income', 'credit_score']]
+y = df['loan_status']
+
+# Step 3: Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Step 4: Train Decision Tree model
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
+
+# Step 5: Prediction function
+def predict_loan(income, credit_score):
+    pred = model.predict([[income, credit_score]])
+    return "APPROVED" if pred[0] == 1 else "NOT APPROVED"
+
+# Step 6: Test examples
+print("Income: 30000, Credit Score: 580 →", predict_loan(30000, 580))
+print("Income: 75000, Credit Score: 760 →", predict_loan(75000, 760))
+print("Income: 50000, Credit Score: 680 →", predict_loan(50000, 680))
